@@ -1,5 +1,0 @@
-- hosts: localhost
-  tasks:
-    - name: Include router container tasks
-      include: tasks/router.yaml
-

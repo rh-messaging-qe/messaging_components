@@ -1,2 +1,3 @@
-ansible
-docker-compose
+pytest
+mock
+pytest-mock

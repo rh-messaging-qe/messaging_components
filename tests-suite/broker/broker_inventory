@@ -1,1 +1,0 @@
-broker01 ansible_connection=docker

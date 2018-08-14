@@ -13,32 +13,10 @@ services:
   - docker
 
 before_install:
-  # Docker-CE Installation
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y install docker-ce
+  - pip install tox detox
 
 jobs:
   include:
-    - stage: Messaging Abstraction module unit tests
-      script:
-        - pip install -r messaging_abstraction/requirements.txt -r messaging_abstraction/tests/requirements.txt
-        - py.test messaging_abstraction/tests
-
     - stage: Messaging Components module unit tests
       script:
-        - pip install -r messaging_abstraction/requirements.txt -r messaging_abstraction/tests/requirements.txt
-        - pip install -r messaging_components/requirements.txt -r messaging_components/tests/requirements.txt
-        - py.test messaging_components/tests
-
-    - stage: IQA Test Suite
-      script:
-        # Deploy components' containers to test
-        - cd tests && make all && cd ..
-
-        # Export variable for router IP 
-        - export ROUTER1=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' router1)
-
-        # Run test suite
-        # 
+        - detox
