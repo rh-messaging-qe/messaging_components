@@ -3,19 +3,18 @@
 """
 
 from autologging import logged, traced
-from messaging_components.node.node import Node
+from messaging_abstract.component.client import ClientExternal, Node, Executor
 import messaging_components.protocols as protocols
-from messaging_components.clients.external.externalclient import ExternalClient
 
 
 @logged
 @traced
-class Client(ExternalClient):
+class ClientNodeJS(ClientExternal):
     """NodeJS RHEA client"""
 
     supported_protocols = [protocols.Amqp10()]
-    name = 'NodeJS RHEA client'
-    version = '1.0'
+    implementation = 'NodeJS RHEA client'
+    version = '1.0.1'
 
-    def __init__(self, node: Node):
-        ExternalClient.__init__(self, node)
+    def __init__(self, name: str, node: Node, executor: Executor):
+        super(ClientNodeJS, self).__init__(name, node, executor)
