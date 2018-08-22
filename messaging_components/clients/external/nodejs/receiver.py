@@ -3,72 +3,25 @@
 """
 
 from autologging import logged, traced
+from iqa_common.executor import Executor
+from messaging_abstract.component.client import Receiver, Node
 
-from .opt.brokerurl import BrokerURLnodeJS
-from optconstruct.types.prefixed import Prefixed
-from optconstruct.types import Toggle
-
-import messaging_abstract.client
-from messaging_components.node.node import Node
-from .client import Client
+from messaging_components.clients.external.nodejs.client import ClientNodeJS
+from messaging_components.clients.external.nodejs.command.nodejs_commands import NodeJSReceiverClientCommand
 
 
 @logged
 @traced
-class Receiver(Client, messaging_abstract.client.Receiver):
+class ReceiverNodeJS(Receiver, ClientNodeJS):
     """External NodeJS receiver client."""
-    # client is installed from cli-rhea, node_app is there only for backward compatibility
-    cli_command = ['cli-rhea-receiver']
 
-    # Client-sender params for build execute command
-    cli_params_transformation = [
-        Toggle('help', '--help'),
-        # Control options
-        Prefixed('recv-msg-selector', '--recv-selector'),
-        Toggle('recv-browse', '--recv-browse'),
-        Prefixed('action', '--action'),
-        Prefixed('capacity', '--capacity'),
-        Toggle('process-reply-to', '--process-reply-to'),
-        Prefixed('recv-listen', '--recv-listen'),
-        Prefixed('recv-listen-port', '--recv-listen-port'),
-        Prefixed('duration', '--duration'),
+    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+                    encoding: str = "utf-8") -> NodeJSReceiverClientCommand:
+        return NodeJSReceiverClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
+                                           timeout=timeout, encoding=encoding)
 
-        BrokerURLnodeJS('broker-url', '--broker'),
-        Prefixed('address', '--address'),
-        Prefixed('count', '--count'),
-        Prefixed('close-sleep', '--close-sleep'),
-        Prefixed('timeout', '--timeout'),
+    def receive(self):
+        self.execution = self.execute(self.command)
 
-        # Logging options
-        Prefixed('log-msgs', '--log-msgs'),
-        Prefixed('log-lib', '--log-lib'),
-        Prefixed('log-stats', '--log-stats'),
-
-        # Link options
-        Toggle('link-at-most-once', '--link-at-most-once'),
-        Toggle('link-at-least-once', '--link-at-least-once'),
-        Toggle('link-durable', '--link-durable'),
-
-        # Connection options
-        Prefixed('conn-urls', '--conn-urls'),
-        Prefixed('conn-reconnect', '--conn-reconnect'),
-        Prefixed('conn-reconnect-interval', '--conn-reconnect-interval'),
-        Prefixed('conn-reconnect-limit', '--conn-reconnect-limit'),
-        Prefixed('conn-reconnect-timeout', '--conn-reconnect-timeout'),
-        Prefixed('conn-heartbeat', '--conn-heartbeat'),
-        Prefixed('conn-ssl', '--conn-ssl'),
-        Prefixed('conn-ssl-certificate', '--conn-ssl-certificate'),
-        Prefixed('conn-ssl-password', '--conn-ssl-password'),
-        Prefixed('conn-ssl-trust-store', '--conn-ssl-trust-store'),
-        Prefixed('conn-ssl-verify-peer', '--conn-ssl-verify-peer'),
-        Prefixed('conn-ssl-verify-peer-name', '--conn-ssl-verify-peer-name'),
-        Prefixed('conn-max-frame-size', '--conn-max-frame-size'),
-        Prefixed('conn-web-socket', '--conn-web-socket'),
-
-    ]
-
-    def __init__(self, node: Node):
-        """Init of NodeJS receiver."""
-
-        messaging_abstract.client.Receiver.__init__(self)
-        Client.__init__(self, node)
+    def __init__(self, name: str, node: Node, executor: Executor):
+        super(ReceiverNodeJS, self).__init__(name, node, executor)

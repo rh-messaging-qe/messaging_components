@@ -3,32 +3,23 @@
 """
 
 from autologging import logged, traced
+from iqa_common.executor import Executor
+from messaging_abstract.component.client import Client, Node
 
 import messaging_components.protocols as protocols
-from messaging_abstract.client.client import Client
-
-
-class Timeout:
-    """ # TODO jstejska: Class description """
-
-    def __init__(self, handler):
-        self.registrated_handler = handler
-
-    def on_timer_task(self, event):
-        self.registrated_handler.timeout(event)
 
 
 @logged
 @traced
-class Client(Client):
+class ClientCore(Client):
     """Internal core Proton mapping client."""
 
     supported_protocols = [protocols.Amqp10()]
     name = 'Internal core client'
     version = '0.1'
 
-    def __init__(self):
-        super(Client, self).__init__()
+    def __init__(self, name: str, node: Node, executor: Executor):
+        super(ClientCore, self).__init__(name, node, executor)
 
 #
 # """
