@@ -3,12 +3,14 @@
 
 """setup.py: setuptools control."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
+
+files = ["*"]
 
 setup(
     name='messaging_components',
     version='0.1.0',
-    packages=['messaging_components'],
+    packages=find_packages(),
     license='Apache 2.0',
     description='',
     setup_requires=['pytest-runner'],
