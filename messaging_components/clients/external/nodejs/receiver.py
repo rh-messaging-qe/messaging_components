@@ -15,7 +15,7 @@ from messaging_components.clients.external.nodejs.command.nodejs_commands import
 class ReceiverNodeJS(Receiver, ClientNodeJS):
     """External NodeJS receiver client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> NodeJSReceiverClientCommand:
         return NodeJSReceiverClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                            timeout=timeout, encoding=encoding)

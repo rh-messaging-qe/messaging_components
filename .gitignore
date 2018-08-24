@@ -1,5 +1,8 @@
 *.pyenv*
 logs
+build
+dist
+*.egg-info
 .idea
 *.py[co]
 *.idea

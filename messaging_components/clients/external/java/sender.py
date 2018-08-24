@@ -1,9 +1,9 @@
 from autologging import logged, traced
 from iqa_common.executor import Executor
-from messaging.client.command.impl import JavaSenderClientCommand
 from messaging_abstract.component.client import Sender, Message, Node
 
 from messaging_components.clients.external.java.client import ClientJava
+from messaging_components.clients.external.java.command.java_commands import JavaSenderClientCommand
 
 
 @logged
@@ -11,7 +11,7 @@ from messaging_components.clients.external.java.client import ClientJava
 class SenderJava(Sender, ClientJava):
     """External Java Qpid JMS sender client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> JavaSenderClientCommand:
         return JavaSenderClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                        timeout=timeout, encoding=encoding)

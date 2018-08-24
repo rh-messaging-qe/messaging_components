@@ -15,7 +15,7 @@ from .client import ClientPython
 class ConnectorPython(Connector, ClientPython):
     """External Python-Proton connector client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> PythonConnectorClientCommand:
         return PythonConnectorClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                             timeout=timeout, encoding=encoding)

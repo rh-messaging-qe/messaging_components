@@ -15,7 +15,7 @@ from messaging_components.clients.external.python.command.python_commands import
 class SenderPython(Sender, ClientPython):
     """External Python-Proton sender client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> ClientCommand:
         return PythonSenderClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                          timeout=timeout, encoding=encoding)

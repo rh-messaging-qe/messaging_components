@@ -16,7 +16,7 @@ from .client import ClientPython
 class ReceiverPython(Receiver, ClientPython):
     """External Python-Proton receiver client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> PythonReceiverClientCommand:
         return PythonReceiverClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                            timeout=timeout, encoding=encoding)

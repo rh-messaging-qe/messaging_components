@@ -15,7 +15,7 @@ from .client import ClientNodeJS
 class ConnectorNodeJS(Connector, ClientNodeJS):
     """External NodeJS connector client."""
 
-    def new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
+    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> NodeJSConnectorClientCommand:
         return NodeJSConnectorClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                             timeout=timeout, encoding=encoding)
