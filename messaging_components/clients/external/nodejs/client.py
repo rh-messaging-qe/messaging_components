@@ -13,7 +13,7 @@ class ClientNodeJS(ClientExternal):
     """NodeJS RHEA client"""
 
     supported_protocols = [protocols.Amqp10()]
-    implementation = 'NodeJS RHEA client'
+    implementation = 'nodejs'
     version = '1.0.1'
 
     def __init__(self, name: str, node: Node, executor: Executor):

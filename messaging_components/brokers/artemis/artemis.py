@@ -12,8 +12,9 @@ class Artemis(Broker):
     """
     supported_protocols = [protocols.Amqp10(), protocols.Mqtt(), protocols.Stomp(), protocols.Openwire()]
     name = 'Artemis'
+    implementation = 'artemis'
 
     def __init__(self, name: str, node: Node, executor: Executor, service: Service,
-                 broker_name: str=None, config: str=None, web_port=8161):
+                 broker_name: str=None, config: str=None, web_port=8161, **kwargs):
         super(Artemis, self).__init__(name, node, executor, service, broker_name,
-                                      config, web_port)
+                                      config, web_port, **kwargs)

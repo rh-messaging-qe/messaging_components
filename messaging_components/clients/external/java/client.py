@@ -11,7 +11,7 @@ class ClientJava(ClientExternal):
     """Java Qpid JMS client (base abstract class)."""
 
     supported_protocols = [protocols.Amqp10()]
-    implementation = 'Java Qpid JMS client'
+    implementation = 'java'
     version = '1.0.1'
 
     def __init__(self, name: str, node: Node, executor: Executor):

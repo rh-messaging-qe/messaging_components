@@ -17,9 +17,10 @@ class Dispatch(Router):
     """
 
     name = 'Qpid Dispatch Router'
+    implementation = 'dispatch'
 
-    def __init__(self, name: str, node: Node, executor: Executor, service: Service, port=5672, config=None):
-        super(Dispatch, self).__init__(name, node, executor, service)
+    def __init__(self, name: str, node: Node, executor: Executor, service: Service, port=5672, config=None, **kwargs):
+        super(Dispatch, self).__init__(name, node, executor, service, port, config, **kwargs)
 
         self.qdmanage = QDManage()
         self.qdstat = QDStat()

@@ -10,7 +10,7 @@ class ClientPython(ClientExternal):
     """Python Proton client (base abstract class)."""
 
     supported_protocols = [protocols.Amqp10()]
-    implementation = 'Python Proton client'
+    implementation = 'python'
     version = '1.0.1'
 
     def __init__(self, name: str, node: Node, executor: Executor):

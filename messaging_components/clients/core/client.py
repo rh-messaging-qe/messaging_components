@@ -15,7 +15,7 @@ class ClientCore(Client):
     """Internal core Proton mapping client."""
 
     supported_protocols = [protocols.Amqp10()]
-    name = 'Internal core client'
+    implementation = 'core'
     version = '0.1'
 
     def __init__(self, name: str, node: Node, executor: Executor):
