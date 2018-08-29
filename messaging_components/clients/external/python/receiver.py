@@ -16,12 +16,18 @@ from .client import ClientPython
 class ReceiverPython(Receiver, ClientPython):
     """External Python-Proton receiver client."""
 
+    _command: PythonReceiverClientCommand
+
+    def set_url(self, url: str):
+        self._command.control.broker_url = url
+
     def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
                     encoding: str = "utf-8") -> PythonReceiverClientCommand:
         return PythonReceiverClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                            timeout=timeout, encoding=encoding)
 
     def receive(self):
+        self._command.control.timeout = self.command.timeout
         self.execution = self.execute(self.command)
 
     def __init__(self, name: str, node: Node, executor: Executor):
