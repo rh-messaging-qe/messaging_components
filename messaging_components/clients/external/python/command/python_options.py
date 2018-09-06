@@ -3,7 +3,7 @@
 Specialized options for external Python Proton client commands (cli-proton-python).
 """
 from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 from optconstruct.types import Prefixed
 
 
@@ -45,3 +45,18 @@ class PythonControlOptionsReceiver(ControlOptionsReceiver, PythonControlOptionsS
         PythonControlOptionsSenderReceiver.__init__(self, broker_url=broker_url, count=count,
                                                   timeout=timeout, sync_mode=sync_mode, duration=duration,
                                                   duration_mode=duration_mode, capacity=capacity)
+
+
+class PythonConnectionOptionsCommon(ConnectionOptionsCommon):
+    def __init__(self, conn_allowed_mechs: str=None, urls: str=None, reconnect: bool=None, reconnect_interval: int=None,
+                 reconnect_limit: int=None, reconnect_timeout: int=None, heartbeat: int=None,
+                 max_frame_size: int=None):
+        ConnectionOptionsCommon.__init__(self, urls=urls, reconnect=reconnect, reconnect_interval=reconnect_interval,
+                                         reconnect_limit=reconnect_limit, reconnect_timeout=reconnect_timeout,
+                                         heartbeat=heartbeat, max_frame_size=max_frame_size)
+        self.conn_allowed_mechs = conn_allowed_mechs
+
+    def valid_options(self) -> list:
+        return ConnectionOptionsCommon.valid_options(self) + [
+            Prefixed('conn-allowed-mechs', '--conn-allowed-mechs')
+        ]

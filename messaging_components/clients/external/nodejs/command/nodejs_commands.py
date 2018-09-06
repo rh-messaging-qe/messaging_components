@@ -4,6 +4,8 @@ Specialized implementation of external command for cli-rhea clients (NodeJS).
 """
 from messaging_abstract.component.client.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
     SenderClientCommand
+from messaging_abstract.component.client.command.options.client_options import LinkOptionsSenderReceiver, \
+    ReactorOptionsSenderReceiver
 
 from messaging_components.clients.external.nodejs.command.nodejs_options import NodeJSControlOptionsCommon, \
     NodeJSControlOptionsReceiver, NodeJSControlOptionsSenderReceiver
@@ -36,6 +38,8 @@ class NodeJSReceiverClientCommand(ReceiverClientCommand):
                    encoding: str="utf-8"):
         super(NodeJSReceiverClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = NodeJSControlOptionsReceiver()
+        self.link = LinkOptionsSenderReceiver()
+        self.reactor = ReactorOptionsSenderReceiver()
 
     def main_command(self) -> list:
         return ['cli-rhea-receiver']
@@ -52,6 +56,8 @@ class NodeJSSenderClientCommand(SenderClientCommand):
                    encoding: str="utf-8"):
         super(NodeJSSenderClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = NodeJSControlOptionsSenderReceiver()
+        self.link = LinkOptionsSenderReceiver()
+        self.reactor = ReactorOptionsSenderReceiver()
 
     def main_command(self) -> list:
         return ['cli-rhea-sender']

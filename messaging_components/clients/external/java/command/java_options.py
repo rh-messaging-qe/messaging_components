@@ -1,5 +1,5 @@
 from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 from optconstruct import OptionAbstract
 from optconstruct.types import Toggle, Prefixed, KWOption, ListOption
 
@@ -54,6 +54,24 @@ class JavaControlOptionsReceiver(ControlOptionsReceiver, JavaControlOptionsSende
                                                   duration_mode=duration_mode, capacity=capacity)
 
     def valid_options(self) -> list:
-        return JavaControlOptionsSenderReceiver.valid_options(self) + [
-            Toggle('dynamic', '--dynamic')
+        return JavaControlOptionsSenderReceiver.valid_options(self)
+
+
+class JavaConnectionOptionsCommon(ConnectionOptionsCommon):
+    def __init__(self, conn_auth_mechanisms: str=None, conn_username: str=None,
+                 conn_password: str = None, urls: str=None, reconnect: bool=None,
+                 reconnect_interval: int=None, reconnect_limit: int=None, reconnect_timeout: int=None,
+                 heartbeat: int=None, max_frame_size: int=None):
+        ConnectionOptionsCommon.__init__(self, urls=urls, reconnect=reconnect, reconnect_interval=reconnect_interval,
+                                         reconnect_limit=reconnect_limit, reconnect_timeout=reconnect_timeout,
+                                         heartbeat=heartbeat, max_frame_size=max_frame_size)
+        self.conn_auth_mechanisms = conn_auth_mechanisms
+        self.conn_username = conn_username
+        self.conn_password = conn_password
+
+    def valid_options(self) -> list:
+        return ConnectionOptionsCommon.valid_options(self) + [
+            Prefixed('conn-auth-mechanisms', '--conn-auth-mechanisms'),
+            Prefixed('conn-username', '--conn-username'),
+            Prefixed('conn-password', '--conn-password')
         ]

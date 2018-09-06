@@ -6,6 +6,9 @@ from .java import *
 
 class ClientFactory(object):
 
+    # Static element to store all available implementations
+    _implementations: list = []
+
     @staticmethod
     def create_clients(implementation: str, node: Node, executor: Executor) -> list:
 
@@ -24,3 +27,19 @@ class ClientFactory(object):
             return clients
 
         raise ValueError('Invalid client implementation')
+
+    @staticmethod
+    def get_available_implementations() -> list:
+
+        # If implementations list has already been loaded, use it
+        if ClientFactory._implementations:
+            return ClientFactory._implementations
+
+        result = []
+
+        for client in ClientExternal.__subclasses__():
+            result.append(client.implementation)
+
+        ClientFactory._implementations = result
+
+        return result

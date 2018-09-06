@@ -6,7 +6,7 @@ from messaging_abstract.component.client.command.client_command import Connector
     SenderClientCommand
 
 from messaging_components.clients.external.java.command.java_options import JavaControlOptionsCommon, \
-    JavaControlOptionsReceiver, JavaControlOptionsSenderReceiver
+    JavaControlOptionsReceiver, JavaControlOptionsSenderReceiver, JavaConnectionOptionsCommon
 
 
 class JavaConnectorClientCommand(ConnectorClientCommand):
@@ -20,6 +20,7 @@ class JavaConnectorClientCommand(ConnectorClientCommand):
                    encoding: str="utf-8"):
         super(JavaConnectorClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = JavaControlOptionsCommon()
+        self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['java', '-jar', 'cli-qpid.jar', 'connector']
@@ -37,6 +38,7 @@ class JavaReceiverClientCommand(ReceiverClientCommand):
         """
         super(JavaReceiverClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = JavaControlOptionsReceiver()
+        self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['java', '-jar', 'cli-qpid.jar', 'receiver']
@@ -53,6 +55,7 @@ class JavaSenderClientCommand(SenderClientCommand):
         """
         super(JavaSenderClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = JavaControlOptionsSenderReceiver()
+        self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['java', '-jar', 'cli-qpid.jar', 'sender']
