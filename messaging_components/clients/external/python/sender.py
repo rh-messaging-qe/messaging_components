@@ -21,8 +21,11 @@ class SenderPython(Sender, ClientPython):
     def set_url(self, url: str):
         self._command.control.broker_url = url
 
-    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
-                    encoding: str = "utf-8") -> ClientCommand:
+    def set_auth_mechs(self, mechs: str):
+        self._command.connection.conn_allowed_mechs = mechs
+
+    def _new_command(self, stdout: bool = True, stderr: bool = True, daemon: bool = True,
+                     timeout: int = ClientPython.TIMEOUT, encoding: str = "utf-8") -> ClientCommand:
         return PythonSenderClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                          timeout=timeout, encoding=encoding)
 

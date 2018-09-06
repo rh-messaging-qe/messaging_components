@@ -26,12 +26,16 @@ class SenderNodeJS(Sender, ClientNodeJS):
 
     def set_url(self, url: str):
         p_url = urlparse(url)
-        self._command.control.broker = urlunparse((p_url.scheme or '', p_url.netloc or '', '', '', '', ''))
+        p_url._replace(scheme=None)
+        self._command.control.broker = p_url.netloc
         self._command.control.address = urlunparse(('', '', p_url.path or '', p_url.params or '',
                                                     p_url.query or '', p_url.fragment or ''))
 
-    def _new_command(self, stdout: bool = False, stderr: bool = False, daemon: bool = False, timeout: int = 0,
-                    encoding: str = "utf-8") -> NodeJSSenderClientCommand:
+    def set_auth_mechs(self, mechs: str):
+        pass
+
+    def _new_command(self, stdout: bool = True, stderr: bool = True, daemon: bool = True,
+                     timeout: int = ClientNodeJS.TIMEOUT, encoding: str = "utf-8") -> NodeJSSenderClientCommand:
         return NodeJSSenderClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
                                          timeout=timeout, encoding=encoding)
 

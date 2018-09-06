@@ -4,9 +4,11 @@ Implementation of cli-proton-python external client command.
 """
 from messaging_abstract.component.client.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
     SenderClientCommand
+from messaging_abstract.component.client.command.options.client_options import LinkOptionsSenderReceiver, \
+    LinkOptionsReceiver, ReactorOptionsSenderReceiver
 
 from messaging_components.clients.external.python.command.python_options import PythonControlOptionsCommon, \
-    PythonControlOptionsReceiver, PythonControlOptionsSenderReceiver
+    PythonControlOptionsReceiver, PythonControlOptionsSenderReceiver, PythonConnectionOptionsCommon
 
 
 class PythonConnectorClientCommand(ConnectorClientCommand):
@@ -19,6 +21,7 @@ class PythonConnectorClientCommand(ConnectorClientCommand):
                  timeout: int=0, encoding: str="utf-8"):
         super(PythonConnectorClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = PythonControlOptionsCommon()
+        self.connection = PythonConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['cli-proton-python-connector']
@@ -34,6 +37,9 @@ class PythonReceiverClientCommand(ReceiverClientCommand):
                  timeout: int=0, encoding: str="utf-8"):
         super(PythonReceiverClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = PythonControlOptionsReceiver()
+        self.link = LinkOptionsReceiver()
+        self.reactor = ReactorOptionsSenderReceiver()
+        self.connection = PythonConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['cli-proton-python-receiver']
@@ -49,6 +55,9 @@ class PythonSenderClientCommand(SenderClientCommand):
                  timeout: int=0, encoding: str="utf-8"):
         super(PythonSenderClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = PythonControlOptionsSenderReceiver()
+        self.link = LinkOptionsSenderReceiver()
+        self.reactor = ReactorOptionsSenderReceiver()
+        self.connection = PythonConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['cli-proton-python-sender']
