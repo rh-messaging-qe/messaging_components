@@ -59,7 +59,10 @@ class JavaControlOptionsReceiver(ControlOptionsReceiver, JavaControlOptionsSende
 
 class JavaConnectionOptionsCommon(ConnectionOptionsCommon):
     def __init__(self, conn_auth_mechanisms: str=None, conn_username: str=None,
-                 conn_password: str = None, urls: str=None, reconnect: bool=None,
+                 conn_password: str = None, conn_ssl_keystore_location: str=None,
+                 conn_ssl_keystore_password: str=None, conn_ssl_key_alias: str=None,
+                 conn_ssl_trust_all: str=None, conn_ssl_verify_host: str=None,
+                 urls: str=None, reconnect: bool=None,
                  reconnect_interval: int=None, reconnect_limit: int=None, reconnect_timeout: int=None,
                  heartbeat: int=None, max_frame_size: int=None):
         ConnectionOptionsCommon.__init__(self, urls=urls, reconnect=reconnect, reconnect_interval=reconnect_interval,
@@ -68,10 +71,20 @@ class JavaConnectionOptionsCommon(ConnectionOptionsCommon):
         self.conn_auth_mechanisms = conn_auth_mechanisms
         self.conn_username = conn_username
         self.conn_password = conn_password
+        self.conn_ssl_keystore_location = conn_ssl_keystore_location
+        self.conn_ssl_keystore_password = conn_ssl_keystore_password
+        self.conn_ssl_key_alias = conn_ssl_key_alias
+        self.conn_ssl_trust_all = conn_ssl_trust_all
+        self.conn_ssl_verify_host = conn_ssl_verify_host
 
     def valid_options(self) -> list:
         return ConnectionOptionsCommon.valid_options(self) + [
             Prefixed('conn-auth-mechanisms', '--conn-auth-mechanisms'),
             Prefixed('conn-username', '--conn-username'),
-            Prefixed('conn-password', '--conn-password')
+            Prefixed('conn-password', '--conn-password'),
+            Prefixed('conn-ssl-keystore-location', '--conn-ssl-keystore-location'),
+            Prefixed('conn-ssl-keystore-password', '--conn-ssl-keystore-password'),
+            Prefixed('conn-ssl-key-alias', '--conn-ssl-key-alias'),
+            Prefixed('conn-ssl-trust-all', '--conn-ssl-trust-all'),
+            Prefixed('conn-ssl-verify-host', '--conn-ssl-verify-host')
         ]

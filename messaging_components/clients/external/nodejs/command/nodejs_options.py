@@ -3,8 +3,8 @@
 Specialized options for external Node JS client commands (cli-rhea).
 """
 from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver
-from optconstruct.types import Prefixed
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
+from optconstruct.types import Prefixed, Toggle
 
 
 class NodeJSControlOptionsCommon(ControlOptionsCommon):
@@ -53,3 +53,28 @@ class NodeJSControlOptionsReceiver(ControlOptionsReceiver, NodeJSControlOptionsS
         NodeJSControlOptionsSenderReceiver.__init__(self, broker=broker, count=count, timeout=timeout,
                                                   sync_mode=sync_mode, duration=duration,
                                                   duration_mode=duration_mode, capacity=capacity)
+
+
+class NodeJSConnectionOptionsCommon(ConnectionOptionsCommon):
+    def __init__(self, conn_ssl: bool=None, conn_ssl_certificate: str=None, conn_ssl_private_key: str=None,
+                 conn_ws: bool=None, conn_ws_protocols: str=None,
+                 urls: str=None, reconnect: bool=None, reconnect_interval: int=None,
+                 reconnect_limit: int=None, reconnect_timeout: int=None, heartbeat: int=None,
+                 max_frame_size: int=None):
+        ConnectionOptionsCommon.__init__(self, urls=urls, reconnect=reconnect, reconnect_interval=reconnect_interval,
+                                         reconnect_limit=reconnect_limit, reconnect_timeout=reconnect_timeout,
+                                         heartbeat=heartbeat, max_frame_size=max_frame_size)
+        self.conn_ssl = conn_ssl
+        self.conn_ssl_certificate = conn_ssl_certificate
+        self.conn_ssl_private_key = conn_ssl_private_key
+        self.conn_ws = conn_ws
+        self.conn_ws_protocols = conn_ws_protocols
+
+    def valid_options(self) -> list:
+        return ConnectionOptionsCommon.valid_options(self) + [
+            Toggle('conn-ssl', '--conn-ssl'),
+            Prefixed('conn-ssl-certificate', '--conn-ssl-certificate'),
+            Prefixed('conn-ssl-private-key', '--conn-ssl-private-key'),
+            Toggle('conn-ws', '--conn-ws'),
+            Prefixed('conn-ws-protocols', '--conn-ws-protocols')
+        ]

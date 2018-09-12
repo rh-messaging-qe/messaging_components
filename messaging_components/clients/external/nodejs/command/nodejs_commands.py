@@ -8,7 +8,7 @@ from messaging_abstract.component.client.command.options.client_options import L
     ReactorOptionsSenderReceiver
 
 from messaging_components.clients.external.nodejs.command.nodejs_options import NodeJSControlOptionsCommon, \
-    NodeJSControlOptionsReceiver, NodeJSControlOptionsSenderReceiver
+    NodeJSControlOptionsReceiver, NodeJSControlOptionsSenderReceiver, NodeJSConnectionOptionsCommon
 
 
 class NodeJSConnectorClientCommand(ConnectorClientCommand):
@@ -22,6 +22,7 @@ class NodeJSConnectorClientCommand(ConnectorClientCommand):
                    encoding: str="utf-8"):
         super(NodeJSConnectorClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = NodeJSControlOptionsCommon()
+        self.connection = NodeJSConnectionOptionsCommon()
 
     def main_command(self) -> list:
         return ['cli-rhea-connector']
@@ -38,6 +39,7 @@ class NodeJSReceiverClientCommand(ReceiverClientCommand):
                    encoding: str="utf-8"):
         super(NodeJSReceiverClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = NodeJSControlOptionsReceiver()
+        self.connection = NodeJSConnectionOptionsCommon()
         self.link = LinkOptionsSenderReceiver()
         self.reactor = ReactorOptionsSenderReceiver()
 
@@ -56,6 +58,7 @@ class NodeJSSenderClientCommand(SenderClientCommand):
                    encoding: str="utf-8"):
         super(NodeJSSenderClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
         self.control = NodeJSControlOptionsSenderReceiver()
+        self.connection = NodeJSConnectionOptionsCommon()
         self.link = LinkOptionsSenderReceiver()
         self.reactor = ReactorOptionsSenderReceiver()
 
