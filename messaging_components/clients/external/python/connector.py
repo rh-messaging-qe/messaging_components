@@ -23,6 +23,11 @@ class ConnectorPython(Connector, ClientPython):
     def set_auth_mechs(self, mechs: str):
         self._command.connection.conn_allowed_mechs = mechs
 
+    def set_ssl_auth(self, pem_file: str = None, key_file: str = None, keystore: str = None, keystore_pass: str = None,
+                     keystore_alias: str = None):
+        self._command.connection.conn_ssl_certificate = pem_file
+        self._command.connection.conn_ssl_private_key = key_file
+
     def _new_command(self, stdout: bool = True, stderr: bool = True, daemon: bool = True,
                      timeout: int = ClientPython.TIMEOUT, encoding: str = "utf-8") -> PythonConnectorClientCommand:
         return PythonConnectorClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,

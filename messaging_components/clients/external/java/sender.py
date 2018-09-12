@@ -35,6 +35,14 @@ class SenderJava(Sender, ClientJava):
     def set_auth_mechs(self, mechs: str):
         self._command.connection.conn_auth_mechanisms = mechs
 
+    def set_ssl_auth(self, pem_file: str = None, key_file: str = None, keystore: str = None, keystore_pass: str = None,
+                     keystore_alias: str = None):
+        self._command.connection.conn_ssl_keystore_location = keystore
+        self._command.connection.conn_ssl_keystore_password = keystore_pass
+        self._command.connection.conn_ssl_key_alias = keystore_alias
+        self._command.connection.conn_ssl_verify_host = 'false'
+        self._command.connection.conn_ssl_trust_all = 'true'
+
     def _new_command(self, stdout: bool = True, stderr: bool = True, daemon: bool = True,
                      timeout: int = ClientJava.TIMEOUT, encoding: str = "utf-8") -> JavaSenderClientCommand:
         return JavaSenderClientCommand(stdout=stdout, stderr=stderr, daemon=daemon,
