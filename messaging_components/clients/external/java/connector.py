@@ -19,7 +19,7 @@ class ConnectorJava(Connector, ClientJava):
 
     _command: JavaConnectorClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         p_url = urlparse(url)
         self._command.control.broker = '{}://{}:{}'.\
             format(p_url.scheme or 'amqp', p_url.hostname or '127.0.0.1', p_url.port or '5672')
@@ -52,5 +52,5 @@ class ConnectorJava(Connector, ClientJava):
             return True
         return False
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ConnectorJava, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ConnectorJava, self).__init__(name, node, executor, **kwargs)

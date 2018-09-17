@@ -24,7 +24,7 @@ class SenderNodeJS(Sender, ClientNodeJS):
 
     _command: NodeJSSenderClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         p_url = urlparse(url)
         p_url._replace(scheme=None)
         self._command.control.broker = p_url.netloc
@@ -49,5 +49,5 @@ class SenderNodeJS(Sender, ClientNodeJS):
         self._command.message.msg_content = message.body
         self.execution = self.execute(self.command)
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(SenderNodeJS, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(SenderNodeJS, self).__init__(name, node, executor, **kwargs)

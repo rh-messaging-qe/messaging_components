@@ -10,7 +10,7 @@ class ClientFactory(object):
     _implementations: list = []
 
     @staticmethod
-    def create_clients(implementation: str, node: Node, executor: Executor) -> list:
+    def create_clients(implementation: str, node: Node, executor: Executor, **kwargs) -> list:
 
         for client in ClientExternal.__subclasses__():
 
@@ -22,7 +22,7 @@ class ClientFactory(object):
             clients = []
             for client_impl in client.__subclasses__():
                 name = '%s-%s-%s' % (implementation, client_impl.__name__.lower(), node.hostname)
-                clients.append(client_impl(name=name, node=node, executor=executor))
+                clients.append(client_impl(name=name, node=node, executor=executor, **kwargs))
 
             return clients
 

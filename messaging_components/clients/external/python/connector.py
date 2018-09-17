@@ -17,8 +17,8 @@ class ConnectorPython(Connector, ClientPython):
 
     _command: PythonConnectorClientCommand
 
-    def set_url(self, url: str):
-        self._command.control.broker_url(url)
+    def _set_url(self, url: str):
+        self._command.control.broker_url = url
 
     def set_auth_mechs(self, mechs: str):
         self._command.connection.conn_allowed_mechs = mechs
@@ -39,5 +39,5 @@ class ConnectorPython(Connector, ClientPython):
             return True
         return False
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ConnectorPython, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ConnectorPython, self).__init__(name, node, executor, **kwargs)

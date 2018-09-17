@@ -23,7 +23,7 @@ class ReceiverNodeJS(Receiver, ClientNodeJS):
 
     _command: NodeJSReceiverClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         p_url = urlparse(url)
         p_url._replace(scheme=None)
         self._command.control.broker = p_url.netloc
@@ -45,8 +45,7 @@ class ReceiverNodeJS(Receiver, ClientNodeJS):
                                            timeout=timeout, encoding=encoding)
 
     def receive(self):
-        self._command.control.timeout = self.command.timeout
         self.execution = self.execute(self.command)
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ReceiverNodeJS, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ReceiverNodeJS, self).__init__(name, node, executor, **kwargs)

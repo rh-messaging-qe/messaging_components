@@ -19,7 +19,7 @@ class ReceiverJava(Receiver, ClientJava):
 
     _command: JavaReceiverClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         p_url = urlparse(url)
         self._command.control.broker = '{}://{}:{}'.\
             format(p_url.scheme or 'amqp', p_url.hostname or '127.0.0.1', p_url.port or '5672')
@@ -49,8 +49,7 @@ class ReceiverJava(Receiver, ClientJava):
                                          timeout=timeout, encoding=encoding)
 
     def receive(self):
-        self._command.control.timeout = self.command.timeout
         self.execution = self.execute(self.command)
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ReceiverJava, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ReceiverJava, self).__init__(name, node, executor, **kwargs)
