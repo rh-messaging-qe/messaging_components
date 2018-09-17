@@ -18,7 +18,7 @@ class SenderPython(Sender, ClientPython):
     # Just to enforce implementation being used
     _command: PythonSenderClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         self._command.control.broker_url = url
 
     def set_auth_mechs(self, mechs: str):
@@ -38,5 +38,5 @@ class SenderPython(Sender, ClientPython):
         self._command.message.msg_content = message.body
         self.execution = self.execute(self.command)
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(SenderPython, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(SenderPython, self).__init__(name, node, executor, **kwargs)

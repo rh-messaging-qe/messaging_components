@@ -18,7 +18,7 @@ class ReceiverPython(Receiver, ClientPython):
 
     _command: PythonReceiverClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         self._command.control.broker_url = url
 
     def set_auth_mechs(self, mechs: str):
@@ -35,8 +35,7 @@ class ReceiverPython(Receiver, ClientPython):
                                            timeout=timeout, encoding=encoding)
 
     def receive(self):
-        self._command.control.timeout = self.command.timeout
         self.execution = self.execute(self.command)
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ReceiverPython, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ReceiverPython, self).__init__(name, node, executor, **kwargs)

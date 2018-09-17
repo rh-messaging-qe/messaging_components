@@ -23,7 +23,7 @@ class ConnectorNodeJS(Connector, ClientNodeJS):
 
     _command: NodeJSConnectorClientCommand
 
-    def set_url(self, url: str):
+    def _set_url(self, url: str):
         p_url = urlparse(url)
         p_url._replace(scheme=None)
         self._command.control.broker = p_url.netloc
@@ -50,5 +50,5 @@ class ConnectorNodeJS(Connector, ClientNodeJS):
             return True
         return False
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ConnectorNodeJS, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ConnectorNodeJS, self).__init__(name, node, executor, **kwargs)

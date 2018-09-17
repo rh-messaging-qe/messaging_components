@@ -16,6 +16,9 @@ class JavaControlOptionsCommon(ControlOptionsCommon):
                  timeout: int=None, sync_mode: str=None, close_sleep: int=None):
         super(JavaControlOptionsCommon, self).__init__(count, timeout, sync_mode, close_sleep)
         self.broker = broker
+        # No timeout on java client is -1
+        if timeout is None:
+            self.timeout = -1
 
     def valid_options(self) -> list:
         return ControlOptionsCommon.valid_options(self) + [

@@ -14,5 +14,5 @@ class ClientJava(ClientExternal):
     implementation = 'java'
     version = '1.0.1'
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(ClientJava, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
+        super(ClientJava, self).__init__(name, node, executor, **kwargs)
