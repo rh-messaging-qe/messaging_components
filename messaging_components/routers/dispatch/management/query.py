@@ -1,7 +1,8 @@
 from collections import namedtuple
 from typing import NamedTuple
 
-from proton import Url
+from messaging_abstract.component import Router
+from proton import Url, SSLDomain
 from proton.utils import BlockingConnection, SyncRequestResponse
 import proton
 
@@ -11,9 +12,33 @@ class RouterQuery(object):
     Provides methods that can be used to query the Dispatch Router.
     Connections are closed after each query.
     """
-    def __init__(self, host="0.0.0.0", port=5672):
-        self.host = host
+    def __init__(self, host="0.0.0.0", port=5672, router: Router=None):
+
         self.port = port
+        self.host = host
+        self._router = router
+        self._connection_options = {
+            'sasl_enabled': False,
+            'ssl_domain': None,
+            'allow_insecure_mechs': True,
+            'user': None,
+            'password': None
+        }
+
+        if self._router:
+            # Enable SASL when credentials provided
+            self._connection_options['sasl_enabled'] = self._router.has_ssl_keys() or self._router.has_credentials()
+
+            # If SSL certificates provided, use them
+            if self._router.has_ssl_keys():
+                ssl_domain = SSLDomain(SSLDomain.MODE_CLIENT)
+                ssl_domain.set_credentials(self._router.pem_file, self._router.key_file, self._router.key_password)
+                self._connection_options['ssl_domain'] = ssl_domain
+
+            # If User and Password provided
+            if self._router.has_credentials():
+                self._connection_options['user'] = self._router.user
+                self._connection_options['password'] = self._router.password
 
     def query(self, entity_type: str='org.apache.qpid.dispatch.router.node') -> NamedTuple:
         """
@@ -26,19 +51,24 @@ class RouterQuery(object):
         :param entity_type:
         :return:
         """
+        # Scheme to use
+        scheme = 'amqp'
+        if self._connection_options['ssl_domain']:
+            scheme = 'amqps'
+
         # URL to test
-        url = Url("amqp://%s:%s/$management" % (self.host, self.port))
+        url = Url("%s://%s:%s/$management" % (scheme, self.host, self.port))
 
         # Proton connection
-        connection = BlockingConnection(url, sasl_enabled=False)
+        connection = BlockingConnection(url, **self._connection_options)
 
         # Proton sync client
         client = SyncRequestResponse(connection, url.path)
 
         # Request message object
         request = proton.Message()
-        request.properties = {u'operation': u'QUERY', u'entityType':u'%s' % entity_type}
-        request.body = {u'attributeNames':[]}
+        request.properties = {u'operation': u'QUERY', u'entityType': u'%s' % entity_type}
+        request.body = {u'attributeNames': []}
 
         # Sending the request
         response = client.call(request)
@@ -56,6 +86,7 @@ class RouterQuery(object):
 
         return records
 
+    # Entities that can be queried
     def listener(self):
         return self.query(entity_type='org.apache.qpid.dispatch.listener')
 
