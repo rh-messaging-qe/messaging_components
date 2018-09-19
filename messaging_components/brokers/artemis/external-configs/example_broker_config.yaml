@@ -1,0 +1,309 @@
+---
+
+my-artemis-broker:
+  _defaults:
+    broker_name: amq
+    broker_home: /opt/artemis
+    broker_instance: /home/artemis/my-artemis-broker
+    cluster_multicast_address: 223.7.7.7
+    cluster_multicast_port: 9876
+    cluster_connector_protocol: tcp
+    cluster_connector_address: 0.0.0.0
+    cluster_connector_port: 61616
+    log_level_all: INFO
+    cluster_load_balancing: ON_DEMAND
+
+  render:
+    generator_notice: True
+    licenses: True
+    template: artemis/2.5.0
+
+  broker_xml:
+    name: 'my-artemis-broker'
+
+    journal:
+      persistence_enabled: true
+      type: 'ASYNCIO'
+      directory: data/journal
+      min_files: 2
+      pool_files: 10
+      file_size: 10M
+      buffer_timeout: 20000
+      max_io: 4096
+    paging_directory: data/paging
+    bindings_directory: data/bindings
+    large_messages_directory: data/large-messages
+    disk_scan_period: 5000
+    max_disk_usage: 90
+
+    critical_analyzer:
+      enabled: true
+      timeout: 120000
+      check_period: 60000
+      policy: HALT
+    acceptors:
+    - name: artemis
+      protocol: tcp
+      address: 0.0.0.0
+      port: 61616
+      properties:
+      - tcpSendBufferSize: 1048576
+      - tcpReceiveBufferSize: 1048576
+      - protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
+      - useEpoll: true
+      - amqpCredits: 1000
+      - amqpLowCredits: 300
+    - name: amqp
+      protocol: tcp
+      address: 0.0.0.0
+      port: 5672
+      properties:
+      - tcpSendBufferSize: 1048576
+      - tcpReceiveBufferSize: 1048576
+      - protocols: AMQP
+      - useEpoll: true
+      - amqpCredits: 1000
+      - amqpLowCredits: 300
+    - name: stomp
+      protocol: tcp
+      address: 0.0.0.0
+      port: 61613
+      properties:
+      - tcpSendBufferSize: 1048576
+      - tcpReceiveBufferSize: 1048576
+      - protocols: STOMP
+      - useEpoll: true
+    - name: hornetq
+      protocol: tcp
+      address: 0.0.0.0
+      port: 5445
+      properties:
+      - anycastPrefix: jms.queue.
+      - multicastPrefix: jms.topic.
+      - protocols: HORNETQ,STOMP
+      - useEpoll: true
+    - name: mqtt
+      protocol: tcp
+      address: 0.0.0.0
+      port: 1883
+      properties:
+      - tcpSendBufferSize: 1048576
+      - tcpReceiveBufferSize: 1048576
+      - protocols: MQTT
+      - useEpoll: true
+    security_settings:
+      - match: '#'
+        permissions:
+          createNonDurableQueue:
+          - artemis
+          deleteNonDurableQueue:
+          - artemis
+          createDurableQueue:
+          - artemis
+          deleteDurableQueue:
+          - artemis
+          createAddress:
+          - artemis
+          deleteAddress:
+          - artemis
+          consume:
+          - artemis
+          browse:
+          - artemis
+          send:
+          - artemis
+          manage:
+          - artemis
+    address_settings:
+    - match: activemq.management#
+      dead_letter_address: DLQ
+      expiry_address: ExpiryQueue
+      redelivery_delay: 0
+      max_size_bytes: -1
+      message_counter_history_day_limit: 10
+      address_full_policy: PAGE
+      auto_create_queues: true
+      auto_create_addresses: true
+      auto_create_jms_queues: true
+      auto_create_jms_topics: true
+      redistribution_delay: 0
+    - match: '#'
+      dead_letter_address: DLQ
+      expiry_address: ExpiryQueue
+      redelivery_delay: 0
+      max_size_bytes: -1
+      message_counter_history_day_limit: 10
+      address_full_policy: PAGE
+      auto_create_queues: true
+      auto_create_addresses: true
+      auto_create_jms_queues: true
+      auto_create_jms_topics: true
+      redistribution_delay: 0
+    addresses:
+    - name: DLQ
+      anycast:
+      - name: test
+        type: queue
+    - name: ExpiryQueue
+      anycast:
+      - name: ExpiryQueue
+        type: queue
+
+  # artemis.profile
+  # _defaults:
+  #   broker_home: /opt/artemis-2.5.0
+  #   broker_instance: /opt/artemis-2.5.0-i0/
+
+  artemis_profile:
+    home: '/opt/artemis'
+    instance: '/home/artemis/my-artemis-broker'
+    data_dir: '/home/artemis/my-artemis-broker/data'
+    instance_uri: 'file:/home/artemis/my-artemis-broker'
+    instance_etc_uri: 'file:/home/artemis/my-artemis-broker/etc/'
+    java_args:
+      - -XX:+PrintClassHistogram
+      - -XX:+UseG1GC
+      - -XX:+AggressiveOpts
+      - -XX:+UseFastAccessorMethods
+      - -Xms512M
+      - -Xmx2G
+      - -Dhawtio.realm=activemq
+      - -Dhawtio.offline="true"
+      - -Dhawtio.role=amq
+      - -Dhawtio.rolePrincipalClasses=org.apache.activemq.artemis.spi.core.security.jaas.RolePrincipal
+      - -Djolokia.policyLocation=${ARTEMIS_INSTANCE_ETC_URI}jolokia-access.xml
+  # users and roles properties xml
+  artemis_roles:
+    amq:
+    - admin
+
+
+  artemis_users:
+    admin: ENC(1024:FB08C484A92346D0E29293D75DFECF2CE3752AD38D90300432D85F2F1A65F940:94E5C28B09AF3728B4FC27448B391DFD8EDC1C21A5B65E66A604F4A6CE63DBAD644479DD78E46DE18E79700AF4DC114355DB4B61FA6170C8AFD17700CD30946E)
+  # bootstrap.xml
+  bootstrap_xml:
+    jaas_security:
+      - domain: activemq
+    server:
+      configuration: 'file:/home/artemis/my-artemis-broker/etc/broker.xml'
+    web:
+      bind: http://0.0.0.0:8161
+      path: web
+      apps:
+      - url: activemq-branding
+        war: activemq-branding.war
+      - url: artemis-plugin
+        war: artemis-plugin.war
+      - url: console
+        war: console.war
+  # jolokia-access.xml
+  jolokia_access:
+    allow_origins:
+    - "*"
+    strict_checking: true
+  # logging.properties
+  # _defaults:
+  #  log_level_all: INFO
+  #  log_level_root: DEBUG
+  #  log_level_server: INFO
+  #  log_level_journal: INFO
+  #  log_level_utils: INFO
+  #  log_level_jms: INFO
+  #  log_level_integration: INFO
+  #  log_level_jetty: WARN
+  #  log_level_handler_console: DEBUG
+  #  log_level_handler_file: DEBUG
+
+  logging_properties:
+    loggers:
+    - org.eclipse.jetty
+    - org.jboss.logging
+    - org.apache.activemq.artemis.core.server
+    - org.apache.activemq.artemis.utils
+    - org.apache.activemq.artemis.journal
+    - org.apache.activemq.artemis.jms.server
+    - org.apache.activemq.artemis.integration.bootstrap
+    logger_level: 'INFO'
+    logger_properties:
+    - org.apache.activemq.artemis.core.server.level: 'INFO'
+    - org.apache.activemq.artemis.core.journal.level: 'INFO'
+    - org.apache.activemq.artemis.core.utils.level: 'INFO'
+    - org.apache.activemq.artemis.core.jms.level: 'INFO'
+    - org.apache.activemq.artemis.core.integration.bootstrap.level: 'INFO'
+    - org.eclipse.jetty.level: 'INFO'
+    handlers:
+    - name: CONSOLE
+      class_name: org.jboss.logmanager.handlers.ConsoleHandler
+      level: 'INFO'
+      formatter: PATTERN
+      properties:
+      - autoFlush: true
+    - name: FILE
+      class_name: org.jboss.logmanager.handlers.PeriodicRotatingFileHandler
+      level: 'INFO'
+      formatter: PATTERN
+      properties:
+      - suffix: .yyyy-MM-dd
+      - append: true
+      - autoFlush: true
+      - fileName: ${artemis.instance}/log/artemis.log
+    formatters:
+      - name: PATTERN
+        class_name: org.jboss.logmanager.formatters.PatternFormatter
+        properties:
+        - pattern: "%d %-5p [%c] %s%E%n"
+  # login.config
+  login_config:
+    - name: activemq
+      modules:
+      - class_name: org.apache.activemq.artemis.spi.core.security.jaas.PropertiesLoginModule
+        flag: required
+        properties:
+        - debug: false
+        - reload: true
+        - org.apache.activemq.jaas.properties.user: "artemis-users.properties"
+        - org.apache.activemq.jaas.properties.role: "artemis-roles.properties"
+  # management.xml
+  management_xml:
+    connector_port: 1099
+    connector_host: 0.0.0.0
+    whitelist:
+    - domain: hawtio
+    default_access:
+      - method: 'list*'
+        roles:
+        - amq
+      - method: 'get*'
+        roles:
+        - amq
+      - method: 'is*'
+        roles:
+        - amq
+      - method: 'set*'
+        roles:
+        - amq
+      - method: '*'
+        roles:
+        - amq
+    role_access:
+      - domain: org.apache.activemq.artemis
+        access:
+        - method: 'list*'
+          roles:
+          - amq
+        - method: 'get*'
+          roles:
+          - amq
+        - method: 'is*'
+          roles:
+          - amq
+        - method: 'set*'
+          roles:
+          - amq
+        - method: '*'
+          roles:
+          - amq
+  node_information:
+    default_address: <my-hostname>
+    addresses:
+      default_ssh: <my-hostname>
