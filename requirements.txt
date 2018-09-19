@@ -1,6 +1,9 @@
-mock
-pytest
-reformat
 autologging
+dpath
+mock
 odict
 optconstruct
+pytest
+pyyaml
+reformat
+requests
