@@ -1,7 +1,8 @@
-from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 from optconstruct import OptionAbstract
 from optconstruct.types import Toggle, Prefixed, KWOption, ListOption
+
+from messaging_components.clients.external.command.options.client_options import ControlOptionsCommon, \
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 
 """
 Specialized options for external Java client commands (cli-qpid.jar).

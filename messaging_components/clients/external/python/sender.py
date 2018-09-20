@@ -3,9 +3,10 @@
 """
 
 from autologging import logged, traced
-from messaging_abstract.component.client import Sender, Node, Executor, ClientCommand
+from messaging_abstract.component.client import Sender, Node, Executor
 from messaging_abstract.message import Message
 
+from messaging_components.clients.external.command.client_command import ClientCommand
 from messaging_components.clients.external.python.client import ClientPython
 from messaging_components.clients.external.python.command.python_commands import PythonSenderClientCommand
 

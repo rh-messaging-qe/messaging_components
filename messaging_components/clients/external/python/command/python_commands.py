@@ -2,11 +2,8 @@
 """
 Implementation of cli-proton-python external client command.
 """
-from messaging_abstract.component.client.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
-    SenderClientCommand
-from messaging_abstract.component.client.command.options.client_options import LinkOptionsSenderReceiver, \
-    LinkOptionsReceiver, ReactorOptionsSenderReceiver
-
+from messaging_components.clients.external.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
+    LinkOptionsReceiver, ReactorOptionsSenderReceiver, SenderClientCommand, LinkOptionsSenderReceiver
 from messaging_components.clients.external.python.command.python_options import PythonControlOptionsCommon, \
     PythonControlOptionsReceiver, PythonControlOptionsSenderReceiver, PythonConnectionOptionsCommon
 
