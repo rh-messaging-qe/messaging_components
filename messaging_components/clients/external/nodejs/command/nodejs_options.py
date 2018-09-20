@@ -2,9 +2,10 @@
 """
 Specialized options for external Node JS client commands (cli-rhea).
 """
-from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 from optconstruct.types import Prefixed, Toggle
+
+from messaging_components.clients.external.command.options.client_options import ControlOptionsCommon, \
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 
 
 class NodeJSControlOptionsCommon(ControlOptionsCommon):

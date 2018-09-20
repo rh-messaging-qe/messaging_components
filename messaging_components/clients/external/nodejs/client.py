@@ -3,8 +3,9 @@
 """
 
 from autologging import logged, traced
-from messaging_abstract.component.client import ClientExternal, Node, Executor
+from messaging_abstract.component.client import Node, Executor
 import messaging_components.protocols as protocols
+from messaging_components.clients.external import ClientExternal
 
 
 @logged

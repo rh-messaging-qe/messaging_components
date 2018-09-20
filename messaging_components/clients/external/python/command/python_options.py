@@ -2,9 +2,10 @@
 """
 Specialized options for external Python Proton client commands (cli-proton-python).
 """
-from messaging_abstract.component.client.command.options.client_options import ControlOptionsCommon, \
-    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 from optconstruct.types import Prefixed
+
+from messaging_components.clients.external.command.options.client_options import ControlOptionsCommon, \
+    ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 
 
 class PythonControlOptionsCommon(ControlOptionsCommon):
