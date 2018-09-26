@@ -1,8 +1,7 @@
-mock
-pytest
 reformat
 autologging
 odict
 optconstruct
 python-qpid-proton
-messaging_abstract
+git+git://github.com/rh-messaging-qe/iqa_common@devel#egg=iqa_common
+git+git://github.com/rh-messaging-qe/messaging_abstract@devel#egg=messaging_abstract
