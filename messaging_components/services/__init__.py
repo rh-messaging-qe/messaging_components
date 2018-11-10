@@ -22,15 +22,21 @@ class ServiceFactory(object):
 
     @staticmethod
     def create_service(executor: Executor, service_name: str=None, **kwargs) -> Service:
-
         if service_name:
             ServiceFactory._logger.debug("Creating ServiceSystem - name: %s - executor: %s"
                                          % (service_name, executor.__class__.__name__))
             return ServiceSystem(name=service_name, executor=executor)
-        elif isinstance(executor, ExecutorContainer):
-            ServiceFactory._logger.debug("Creating ServiceDocker - name: %s - executor: %s"
-                                         % (executor.container_name, executor.__class__.__name__))
-            return ServiceDocker(name=executor.container_name, executor=executor)
+        else:
+            container_name = None
+            if isinstance(executor, ExecutorContainer):
+                container_name = executor.container_name
+            elif isinstance(executor, ExecutorAnsible) and executor.ansible_connection == 'docker':
+                container_name = executor.ansible_host
+
+            if container_name:
+                ServiceFactory._logger.debug("Creating ServiceDocker - name: %s - executor: %s"
+                                             % (container_name, executor.__class__.__name__))
+                return ServiceDocker(name=container_name, executor=executor)
 
         ServiceFactory._logger.debug("Unable to determine Service")
         raise ValueError('Unable to determine service for server component')
