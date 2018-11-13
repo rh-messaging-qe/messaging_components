@@ -1,5 +1,8 @@
 from enum import Enum
-from iqa_common.executor import Command, Execution, ExecutorAnsible, CommandAnsible, ExecutorContainer, CommandContainer
+from typing import Union
+
+from iqa_common.executor import Command, Execution, ExecutorAnsible, CommandAnsible, ExecutorContainer, \
+    CommandContainer, Executor
 from iqa_common.utils.docker_util import DockerUtil
 from messaging_abstract.component import Service, ServiceStatus
 import logging
@@ -11,8 +14,12 @@ class ServiceDocker(Service):
     So startup and shutdown are done by managing current state of related
     docker container name.
     """
-
     _logger = logging.getLogger(__name__)
+
+    def __init__(self, name: str, executor: Union[ExecutorAnsible, ExecutorContainer]):
+        super().__init__(name, executor)
+        self.docker_host = executor.docker_host
+        self.docker_util = DockerUtil(docker_host=executor.docker_host)
 
     class ServiceDockerState(Enum):
         STARTED = ('start', 'started')
@@ -30,7 +37,7 @@ class ServiceDocker(Service):
         :rtype: ServiceStatus
         """
         try:
-            container = DockerUtil.get_container(self.name)
+            container = self.docker_util.get_container(self.name)
             if not container:
                 ServiceDocker._logger.debug("Service: %s - Status: UNKNOWN" % self.name)
                 return ServiceStatus.UNKNOWN
@@ -83,14 +90,15 @@ class ServiceDocker(Service):
             if service_state == self.ServiceDockerState.RESTARTED:
                 restart = 'yes'
 
-            print('name=%s state=%s restart=%s' % (self.name, state, restart))
-            return CommandAnsible('name=%s state=%s restart=%s' % (self.name, state, restart),
+            print('name=%s state=%s restart=%s docker_host=%s'
+                  % (self.name, state, restart, self.docker_host))
+
+            docker_host_opt = 'docker_host=%s' % self.docker_host if self.docker_host else ''
+            return CommandAnsible('name=%s state=%s restart=%s %s'
+                                  % (self.name, state, restart, docker_host_opt),
                                   ansible_module='docker_container',
                                   stdout=True,
                                   timeout=self.TIMEOUT)
         elif isinstance(self.executor, ExecutorContainer):
             state = service_state.system_state
             return CommandContainer([], docker_command=state, stdout=True, timeout=self.TIMEOUT)
-        else:
-            state = service_state.system_state
-            return Command(['docker', state, self.name], stdout=True, timeout=self.TIMEOUT)
