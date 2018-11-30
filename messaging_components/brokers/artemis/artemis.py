@@ -102,5 +102,5 @@ class Artemis(Broker):
 
         # Updating broker data
         self._addresses_dict = addresses_dict
-        self._addresses = address
+        self._addresses = addresses
         self._queues = queues
