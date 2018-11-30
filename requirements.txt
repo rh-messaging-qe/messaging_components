@@ -6,3 +6,4 @@ odict
 optconstruct
 python-qpid-proton
 messaging_abstract
+requests
