@@ -28,6 +28,11 @@ class Artemis(Broker):
         self._addresses_dict = {}
 
     def queues(self, refresh: bool=True) -> List[Queue]:
+        """
+        Retrieves and lists all queues
+        :param refresh:
+        :return:
+        """
         if self._queues and not refresh:
             return self._queues
 
@@ -35,6 +40,11 @@ class Artemis(Broker):
         return self._queues
 
     def addresses(self, refresh: bool=True) -> List[Address]:
+        """
+        Retrieves and lists all addresses
+        :param refresh:
+        :return:
+        """
         if self._addresses and not refresh:
             return self._addresses
 
@@ -42,16 +52,44 @@ class Artemis(Broker):
         return self._addresses
 
     def create_address(self, address: Address):
-        pass
+        """
+        Creates the given address
+        :param address:
+        :return:
+        """
+        client = self._get_client()
+        client.create_address(address.name, address.routing_type.name)
 
     def create_queue(self, queue: Queue, address: Address, durable: bool = True):
-        pass
+        """
+        Creates a given queue based on provided arguments
+        :param queue:
+        :param address:
+        :param durable:
+        :return:
+        """
+        client = self._get_client()
+        client.create_queue(address.name, queue.name, durable, queue.routing_type.name)
 
     def delete_address(self, name: str, force: bool = False):
-        pass
+        """
+        Deletes an address
+        :param name:
+        :param force:
+        :return:
+        """
+        client = self._get_client()
+        client.delete_address(name, force)
 
     def delete_queue(self, name: str, remove_consumers: bool = False):
-        pass
+        """
+        Deletes a queue
+        :param name:
+        :param remove_consumers:
+        :return:
+        """
+        client = self._get_client()
+        client.delete_queue(name, remove_consumers)
 
     def _refresh_addresses_and_queues(self):
         """
@@ -64,8 +102,7 @@ class Artemis(Broker):
         addresses = list()
 
         # Get a new client instance
-        client = ArtemisJolokiaClient(self.broker_name, self.node.get_ip(), self.web_port,
-                                      self.user, self.password)
+        client = self._get_client()
         queues_result = client.list_queues()
         addresses_result = client.list_addresses()
 
@@ -114,3 +151,12 @@ class Artemis(Broker):
         self._addresses_dict = addresses_dict
         self._addresses = addresses
         self._queues = queues
+
+    def _get_client(self):
+        """
+        Creates a new instance of the Jolokia Client.
+        :return:
+        """
+        client = ArtemisJolokiaClient(self.broker_name, self.node.get_ip(), self.web_port,
+                                      self.user, self.password)
+        return client
