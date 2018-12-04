@@ -21,14 +21,10 @@ class Artemis(Broker):
     name = 'Artemis'
     implementation = 'artemis'
 
-    def __init__(self, name: str, node: Node, executor: Executor, service: Service,
-                 broker_name: str=None, broker_path: str=None, web_port=8161, **kwargs):
-        super(Artemis, self).__init__(name, node, executor, service, broker_name,
-                                      broker_path, web_port, **kwargs)
-        self._management = ArtemisJolokiaClient(broker_name, node.ip, web_port,
-                                                self.user, self.password)
-        self._queues: List[Queue] = List[Queue]()
-        self._addresses: List[Address] = List[Queue]()
+    def __init__(self, name: str, node: Node, executor: Executor, service: Service, **kwargs):
+        super(Artemis, self).__init__(name, node, executor, service, **kwargs)
+        self._queues: List[Queue] = list()
+        self._addresses: List[Address] = list()
         self._addresses_dict = {}
 
     def queues(self, refresh: bool=True) -> List[Queue]:
@@ -67,8 +63,11 @@ class Artemis(Broker):
         queues = list()
         addresses = list()
 
-        queues_result = self._management.list_queues()
-        addresses_result = self._management.list_addresses()
+        # Get a new client instance
+        client = ArtemisJolokiaClient(self.broker_name, self.node.get_ip(), self.web_port,
+                                      self.user, self.password)
+        queues_result = client.list_queues()
+        addresses_result = client.list_addresses()
 
         # In case of errors, return empty list
         if not queues_result.success:
@@ -83,22 +82,33 @@ class Artemis(Broker):
         # Dictionary containing retrieved addresses
         addresses_dict = {}
 
-        # Parsing returned addresses
-        for addr_info in addresses_result.data:
-            address = Address(name=addr_info['name'],
-                              routing_type=RoutingType.from_value(addr_info['routingTypes']))
-            addresses_dict[address.name] = address
-            addresses.append(address)
+        # If no address found, skip it
+        if not addresses_result.data:
+            logging.debug("No addresses available")
+        else:
+            # Parsing returned addresses
+            for addr_info in addresses_result.data:
+                logging.debug("Address found: %s" % addr_info['name'])
+                address = Address(name=addr_info['name'],
+                                  routing_type=RoutingType.from_value(addr_info['routingTypes']))
+                addresses_dict[address.name] = address
+                addresses.append(address)
 
-        # Parsing returned queues
-        for queue_info in queues_result.data:
-            routing_type = RoutingType.from_value(queue_info['routingType'])
-            address = addresses_dict[queue_info['address']]
-            queue = Queue(name=queue_info['name'],
-                          routing_type=routing_type,
-                          address=address)
-            queue.message_count = queue_info['messageCount']
-            address.queues.append(queue)
+        # If no queues returned
+        if not queues_result.data:
+            logging.debug("No queues available")
+        else:
+            # Parsing returned queues
+            for queue_info in queues_result.data:
+                logging.debug("Queue found: %s" % queue_info['name'])
+                routing_type = RoutingType.from_value(queue_info['routingType'])
+                address = addresses_dict[queue_info['address']]
+                queue = Queue(name=queue_info['name'],
+                              routing_type=routing_type,
+                              address=address)
+                queue.message_count = queue_info['messageCount']
+                address.queues.append(queue)
+                queues.append(queue)
 
         # Updating broker data
         self._addresses_dict = addresses_dict
