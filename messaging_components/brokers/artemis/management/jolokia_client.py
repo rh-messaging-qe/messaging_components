@@ -7,24 +7,34 @@ import json
 import copy
 import logging
 
+from requests import ConnectionError, RequestException
+
 
 class ArtemisJolokiaClientResult(Exception):
     """
     Wraps the response object providing a simpler representation.
     """
-    def __init__(self, jolokia_response):
-
+    def __init__(self):
         self.success = False
         self.error = None
         self.error_type = None
         self.data = None  # type: list
-        self.response = jolokia_response
+        self.response = None
+
+    @staticmethod
+    def from_jolokia_response(jolokia_response):
+        res = ArtemisJolokiaClientResult()
+        res.success = False
+        res.error = None
+        res.error_type = None
+        res.data = None
+        res.response = jolokia_response
 
         # If no jolokia_response provided
         if not jolokia_response:
             logging.getLogger().warning("Invalid Jolokia response => %s" % jolokia_response)
-            self.error = 'Invalid Jolokia Response'
-            return
+            res.error = 'Invalid Jolokia Response'
+            return res
 
         # If not a valid JSON returned
         try:
@@ -33,14 +43,25 @@ class ArtemisJolokiaClientResult(Exception):
             logging.getLogger().exception("Invalid JSON returned")
 
         if 'error' in json_response:
-            self.error = json_response['error']
-            self.error_type = json_response['error_type']
+            res.error = json_response['error']
+            res.error_type = json_response['error_type']
             logging.getLogger().debug("Jolokia error_type = '%s' - error = '%s'"
-                                      % (self.error_type, self.error))
-            return
+                                      % (res.error_type, res.error))
+            return res
 
         # At this point, response looks positive
-        self.success = True
+        res.success = True
+        return res
+
+    @staticmethod
+    def from_exception(exception):
+        res = ArtemisJolokiaClientResult()
+        res.success = False
+        res.error = exception.__str__()
+        res.error_type = None
+        res.data = None
+        res.response = None
+        return res
 
 
 class ArtemisJolokiaClient(object):
@@ -172,11 +193,13 @@ class ArtemisJolokiaClient(object):
         logging.getLogger().debug("Request => %s" % json_request)
 
         # Calling the Jolokia API
-        response = requests.post('http://%s:%s/console/jolokia' % (self._ip, self._port),
-                                 json=json_request,
-                                 auth=(self._user, self._password))
-
-        return ArtemisJolokiaClientResult(response)
+        try:
+            response = requests.post('http://%s:%s/console/jolokia' % (self._ip, self._port),
+                                     json=json_request,
+                                     auth=(self._user, self._password))
+            return ArtemisJolokiaClientResult.from_jolokia_response(response)
+        except RequestException as ex:
+            return ArtemisJolokiaClientResult.from_exception(ex)
 
     def _get_all_pages(self, request, page_arg_index):
         """
