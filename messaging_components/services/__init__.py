@@ -3,7 +3,8 @@ from messaging_abstract.component.server.router import *
 from messaging_abstract.component.server.broker import *
 from messaging_abstract.component.server.service import *
 from .service_docker import *
-from .service_system import *
+from .service_system_init import *
+from .service_systemd import *
 import logging
 
 
@@ -23,9 +24,17 @@ class ServiceFactory(object):
     @staticmethod
     def create_service(executor: Executor, service_name: str=None, **kwargs) -> Service:
         if service_name:
-            ServiceFactory._logger.debug("Creating ServiceSystem - name: %s - executor: %s"
-                                         % (service_name, executor.__class__.__name__))
-            return ServiceSystem(name=service_name, executor=executor)
+            # Validate if systemd is available
+            svc_cmd_exec: Execution = executor.execute(Command(['pidof', 'systemd'], stdout=True, timeout=30))
+            if svc_cmd_exec.completed_successfully():
+                # Create ServiceSystemD
+                ServiceFactory._logger.debug("Creating ServiceSystemD - name: %s - executor: %s"
+                                             % (service_name, executor.__class__.__name__))
+                return ServiceSystemD(name=service_name, executor=executor)
+            else:
+                ServiceFactory._logger.debug("Creating ServiceSystemInit - name: %s - executor: %s"
+                                             % (service_name, executor.__class__.__name__))
+                return ServiceSystemInit(name=service_name, executor=executor)
         else:
             container_name = None
             if isinstance(executor, ExecutorContainer):

@@ -26,6 +26,9 @@ class NodeAnsible(Node):
 
     def get_ip(self):
         """Get ip of Ansible node"""
+        if self.ip:
+            return self.ip
+
         cmd_ping = CommandAnsible(ansible_module="setup", ansible_args='filter=ansible_default_ipv4',
                                   stdout=True, stderr=True, timeout=20)
         execution = self.executor.execute(cmd_ping)
