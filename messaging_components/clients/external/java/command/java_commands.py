@@ -22,7 +22,7 @@ class JavaConnectorClientCommand(ConnectorClientCommand):
         self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
-        return ['java', '-jar', 'cli-qpid.jar', 'connector']
+        return ['cli-qpid-connector']
 
 
 class JavaReceiverClientCommand(ReceiverClientCommand):
@@ -40,7 +40,7 @@ class JavaReceiverClientCommand(ReceiverClientCommand):
         self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
-        return ['java', '-jar', 'cli-qpid.jar', 'receiver']
+        return ['cli-qpid-receiver']
 
 
 class JavaSenderClientCommand(SenderClientCommand):
@@ -57,4 +57,4 @@ class JavaSenderClientCommand(SenderClientCommand):
         self.connection = JavaConnectionOptionsCommon()
 
     def main_command(self) -> list:
-        return ['java', '-jar', 'cli-qpid.jar', 'sender']
+        return ['cli-qpid-sender']
