@@ -10,6 +10,7 @@ from messaging_abstract.node.node import Node
 
 import messaging_components.protocols as protocols
 from messaging_components.brokers.artemis.management import ArtemisJolokiaClient
+from messaging_components.config.broker_config import ArtemisConfig
 
 
 class Artemis(Broker):
@@ -26,6 +27,9 @@ class Artemis(Broker):
         self._queues: List[Queue] = list()
         self._addresses: List[Address] = list()
         self._addresses_dict = {}
+
+        self.config = ArtemisConfig(self, **kwargs)
+        self.users = self.config.users
 
     def queues(self, refresh: bool=True) -> List[Queue]:
         """
@@ -160,8 +164,8 @@ class Artemis(Broker):
         Creates a new instance of the Jolokia Client.
         :return:
         """
-        client = ArtemisJolokiaClient(self.broker_name, self.node.get_ip(), self.web_port,
-                                      self.user, self.password)
+        client = ArtemisJolokiaClient(self.config.instance_name, self.node.get_ip(), self.config.ports['web'],
+                                      self.config.get_username('admin'), self.config.get_user_password('admin'))
         return client
 
     def _get_routing_type(self, routing_type: RoutingType) -> str:
