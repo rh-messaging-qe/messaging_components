@@ -1,9 +1,10 @@
-mock
-pytest
-reformat
 autologging
+dpath
+messaging_abstract
+mock
 odict
 optconstruct
+pytest
 python-qpid-proton
-messaging_abstract
+reformat
 requests
