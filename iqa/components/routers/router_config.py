@@ -1,10 +1,10 @@
 from messaging_components.config.config import Config
 
 
-class DispatchConfig(Config):
+class RouterConfig(Config):
 
     def __init__(self, **kwargs):
-        super(DispatchConfig, self).__init__(**kwargs)
+        super(RouterConfig, self).__init__(**kwargs)
 
     def apply_config(self, configuration):
         pass
