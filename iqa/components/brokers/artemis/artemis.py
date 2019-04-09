@@ -1,19 +1,17 @@
 import logging
 from typing import List
 
-from iqa_common.executor import Executor
-from messaging_abstract.component import Queue, Address
-from messaging_abstract.component.server.broker import Broker
-from messaging_abstract.component.server.broker.route import RoutingType
-from messaging_abstract.component.server.service import Service
-from messaging_abstract.node.node import Node
-
-import messaging_components.protocols as protocols
-from messaging_components.brokers.artemis.management import ArtemisJolokiaClient
-from messaging_components.config.broker_config import ArtemisConfig
+from iqa.abstract.components.server.server_component import ServerComponent
+from iqa.abstract.messaging.destination.address import Address
+from iqa.abstract.messaging.destination.queue import Queue
+from iqa.abstract.messaging.destination.routing_type import RoutingType
+from iqa.abstract.messaging.server.broker import Broker
+from iqa.components import protocols
+from iqa.components.brokers.artemis.management import ArtemisJolokiaClient
+from iqa.components.brokers.broker_config import ArtemisConfig
 
 
-class Artemis(Broker):
+class Artemis(Broker, ServerComponent):
     """
     Apache ActiveMQ Artemis has a proven non blocking architecture. It delivers outstanding performance.
     """
@@ -22,8 +20,8 @@ class Artemis(Broker):
     name = 'Artemis'
     implementation = 'artemis'
 
-    def __init__(self, name: str, node: Node, executor: Executor, service: Service, **kwargs):
-        super(Artemis, self).__init__(name, node, executor, service, **kwargs)
+    def __init__(self, name: str, **kwargs):
+        super(Artemis, self).__init__(name, **kwargs)
         self._queues: List[Queue] = list()
         self._addresses: List[Address] = list()
         self._addresses_dict = {}
