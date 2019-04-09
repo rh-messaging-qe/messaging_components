@@ -190,6 +190,8 @@ class ArtemisConfig(BrokerConfig):
     def apply_config(self, yaml_configuration_path, restart=True):
         # self.store_configuration()
         try:
+            # Todo hacky way to turn off debug logging from amqcfg module
+            amqcfg.LOG.setLevel(logging.WARN)
             if self.LOGGER.level != logging.DEBUG:
                 amqcfg.LOG.setLevel(logging.WARN)
             amqcfg.generate(profile=yaml_configuration_path,
@@ -197,7 +199,7 @@ class ArtemisConfig(BrokerConfig):
                             write_profile_data=True)
             exec = self.copy_configuration_files()
 
-            if exec.returncode == 0:
+            if exec.completed_successfully():
                 self.load_configuration_yaml(yaml_configuration_path)
                 self.load_configuration()
             else:
