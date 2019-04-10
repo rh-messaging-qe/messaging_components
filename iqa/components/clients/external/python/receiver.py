@@ -3,11 +3,11 @@
 """
 
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Receiver
-from messaging_abstract.node.node import Node
 
-from messaging_components.clients.external.python.command.python_commands import PythonReceiverClientCommand
+
+from iqa.components.clients.external.python.command.python_commands import PythonReceiverClientCommand
+from iqa.messaging.abstract.client.receiver import Receiver
+from iqa.system.node import Node, Executor
 from .client import ClientPython
 
 

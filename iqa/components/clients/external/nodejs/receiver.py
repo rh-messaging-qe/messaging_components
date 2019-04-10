@@ -3,11 +3,11 @@
 """
 
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Receiver, Node
-
-from messaging_components.clients.external.nodejs.client import ClientNodeJS
-from messaging_components.clients.external.nodejs.command.nodejs_commands import NodeJSReceiverClientCommand
+from iqa.components.clients.external.nodejs.client import ClientNodeJS
+from iqa.components.clients.external.nodejs.command.nodejs_commands import NodeJSReceiverClientCommand
+from iqa.messaging.abstract.client.receiver import Receiver
+from iqa.system.executor import Executor
+from iqa.system.node import Node
 
 try:
     from urlparse import urlparse, urlunparse

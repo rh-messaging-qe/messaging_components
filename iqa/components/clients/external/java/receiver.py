@@ -1,9 +1,9 @@
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Receiver, Node
 
-from messaging_components.clients.external.java.client import ClientJava
-from messaging_components.clients.external.java.command.java_commands import JavaReceiverClientCommand
+from iqa.components.clients.external.java.client import ClientJava
+from iqa.components.clients.external.java.command.java_commands import JavaReceiverClientCommand
+from iqa.messaging.abstract.client.receiver import Receiver
+from iqa.system.node import Node, Executor
 
 try:
     from urlparse import urlparse, urlunparse

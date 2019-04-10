@@ -2,10 +2,10 @@
 """
 Specialized implementation of external command for java clients (currently cli-qpid.jar only). 
 """
-from messaging_components.clients.external.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
+from iqa.components.clients.external.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
     SenderClientCommand
-from messaging_components.clients.external.java.command.java_options import JavaControlOptionsCommon, \
-    JavaControlOptionsReceiver, JavaControlOptionsSenderReceiver, JavaConnectionOptionsCommon
+from iqa.components.clients.external.java.command.java_options import JavaControlOptionsCommon, \
+    JavaConnectionOptionsCommon, JavaControlOptionsReceiver, JavaControlOptionsSenderReceiver
 
 
 class JavaConnectorClientCommand(ConnectorClientCommand):

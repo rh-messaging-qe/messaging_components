@@ -1,7 +1,7 @@
 import abc
 
-from iqa.messaging.abstract.component import Component
-from iqa.messaging.abstract.configuration import Configuration
+from iqa.components.abstract.component import Component
+from iqa.components.abstract.configuration import Configuration
 
 
 class BrokerConfiguration(Configuration):

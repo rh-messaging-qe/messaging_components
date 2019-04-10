@@ -1,9 +1,10 @@
-import messaging_abstract.message
+import iqa
+from iqa.messaging.abstract.message import Message
 
 
-class Message(messaging_abstract.message.Message):
+class Message(Message):
     """
     AMQP10 Message
     """
     def __init__(self):
-        messaging_abstract.message.Message.__init__(self)
+        iqa.messaging_abstract.message.Message.__init__(self)

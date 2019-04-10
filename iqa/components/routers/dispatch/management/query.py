@@ -1,11 +1,12 @@
 from collections import namedtuple
 from typing import NamedTuple
 
-from messaging_abstract.component import Router
 from proton import Url, SSLDomain
 from proton.utils import BlockingConnection, SyncRequestResponse
 import proton
 import logging
+
+from iqa.messaging.abstract.server.router import Router
 
 
 class RouterQuery(object):

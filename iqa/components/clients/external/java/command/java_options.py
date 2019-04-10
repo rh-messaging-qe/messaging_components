@@ -1,7 +1,7 @@
 from optconstruct import OptionAbstract
 from optconstruct.types import Toggle, Prefixed, KWOption, ListOption
 
-from messaging_components.clients.external.command.options.client_options import ControlOptionsCommon, \
+from iqa.components.clients.external.command.options.client_options import ControlOptionsCommon, \
     ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 
 """

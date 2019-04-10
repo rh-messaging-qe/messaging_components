@@ -1,6 +1,7 @@
 from autologging import logged, traced
-from messaging_abstract.protocol import Protocol
-from messaging_components.network.transport import TCP
+
+from iqa.components.abstract.network.protocol import Protocol
+from iqa.components.abstract.network.transport import TCP
 
 
 @logged

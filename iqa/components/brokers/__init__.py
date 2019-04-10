@@ -1,6 +1,6 @@
-from messaging_abstract.component import *
-from messaging_abstract.node.node import Node
-
+from iqa.messaging.abstract.server.broker import Broker
+from iqa.system.node import Node, Executor
+from iqa.system.service import Service
 from .artemis import Artemis
 from .qpid import Qpid
 

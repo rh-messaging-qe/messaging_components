@@ -3,12 +3,14 @@
 """
 
 from autologging import logged, traced
-from messaging_abstract.component.client import Sender, Node, Executor
-from messaging_abstract.message import Message
 
-from messaging_components.clients.external.command.client_command import ClientCommand
-from messaging_components.clients.external.python.client import ClientPython
-from messaging_components.clients.external.python.command.python_commands import PythonSenderClientCommand
+
+from iqa.components.clients.external.command.client_command import ClientCommand
+from iqa.components.clients.external.python.client import ClientPython
+from iqa.components.clients.external.python.command.python_commands import PythonSenderClientCommand
+from iqa.messaging.abstract.client.sender import Sender
+from iqa.messaging.abstract.message import Message
+from iqa.system.node import Node, Executor
 
 
 @logged

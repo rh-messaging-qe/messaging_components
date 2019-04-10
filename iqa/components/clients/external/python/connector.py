@@ -3,16 +3,15 @@
 """
 
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Connector, Node
 
-from messaging_components.clients.external.python.command.python_commands import PythonConnectorClientCommand
+from iqa.components.clients.external.python.command.python_commands import PythonConnectorClientCommand
+from iqa.system.node import Node, Executor
 from .client import ClientPython
 
 
 @logged
 @traced
-class ConnectorPython(Connector, ClientPython):
+class ConnectorPython(ClientPython):
     """External Python-Proton connector client."""
 
     _command: PythonConnectorClientCommand

@@ -1,9 +1,5 @@
-from messaging_abstract.message import Message
-from messaging_abstract.protocol import Protocol
-
-"""
-
-"""
+from iqa.components.abstract.network.protocol import Protocol
+from iqa.messaging.abstract.message import Message
 
 
 class AMQP10(Protocol):

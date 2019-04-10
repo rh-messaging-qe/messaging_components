@@ -1,4 +1,4 @@
-from messaging_components.config.config import Config
+from iqa.components.routers.dispatch.config import Config
 
 
 class RouterConfig(Config):

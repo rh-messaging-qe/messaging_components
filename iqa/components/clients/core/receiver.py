@@ -2,15 +2,14 @@
     # TODO jstejska: Package description
 """
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Receiver, Node
-
-from messaging_components.clients.core.client import ClientCore
+from iqa.components.clients.core.client import CoreMessagingClient
+from iqa.messaging.abstract.client.receiver import Receiver
+from iqa.system.node import Node, Executor
 
 
 @logged
 @traced
-class ReceiverCore(Receiver, ClientCore):
+class ReceiverCore(Receiver, CoreMessagingClient):
     """Core python receiver client."""
     def __init__(self, name: str, node: Node, executor: Executor):
         super(ReceiverCore, self).__init__(name, node, executor)

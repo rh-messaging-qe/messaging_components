@@ -1,19 +1,22 @@
 from autologging import logged, traced
 
+from iqa.components import protocols
+from iqa.components.abstract.component import Component
 from iqa.messaging.abstract.client import MessagingClient
+from iqa.system.node.node import Node
 
 
 @logged
 @traced
-class CoreMessagingClient(MessagingClient):
+class CoreMessagingClient(MessagingClient, Component):
     """Internal core Proton mapping client."""
 
     supported_protocols = [protocols.Amqp10()]
     implementation = 'core'
     version = '0.1'
 
-    def __init__(self, name: str, node: Node, executor: Executor):
-        super(CoreMessagingClient, self).__init__(name, node, executor)
+    def __init__(self, name: str, node: Node):
+        super().__init__(name, node)
 
 #
 # # -*- coding: utf-8 -*-

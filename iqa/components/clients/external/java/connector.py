@@ -1,9 +1,7 @@
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Node, Connector
 
-from messaging_components.clients.external.java.client import ClientJava
-from messaging_components.clients.external.java.command.java_commands import JavaConnectorClientCommand
+from iqa.components.clients import ClientJava, Executor, Node
+from iqa.components.clients.external.java.command.java_commands import JavaConnectorClientCommand
 
 try:
     from urlparse import urlparse, urlunparse
@@ -14,7 +12,7 @@ except ImportError:
 
 @logged
 @traced
-class ConnectorJava(Connector, ClientJava):
+class ConnectorJava(ClientJava):
     """External Java Qpid JMS connector client."""
 
     _command: JavaConnectorClientCommand

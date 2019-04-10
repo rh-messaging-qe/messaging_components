@@ -1,8 +1,7 @@
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Node
-import messaging_components.protocols as protocols
-from messaging_components.clients.external import ClientExternal
+
+from iqa.components.clients.external import ClientExternal, protocols
+from iqa.system.node import Node, Executor
 
 
 @logged

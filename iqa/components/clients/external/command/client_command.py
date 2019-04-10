@@ -7,9 +7,8 @@ Options are also common to implementation language (java, python, etc).
 In case an implementation has a different set of options, specialize it
 in a separate module inside abstract.client.command.impl.
 """
-
-from iqa_common.executor import Command
-from messaging_components.clients.external.command.options.client_options import *
+from iqa.components.clients.external.command.options.client_options import *
+from iqa.system.command.command_base import Command
 
 
 class ClientCommand(Command):

@@ -3,10 +3,9 @@
 """
 
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Connector, Node
 
-from messaging_components.clients.external.nodejs.command.nodejs_commands import NodeJSConnectorClientCommand
+from iqa.components.clients.external.nodejs.command.nodejs_commands import NodeJSConnectorClientCommand
+from iqa.system.node import Node, Executor
 from .client import ClientNodeJS
 
 try:
@@ -18,7 +17,7 @@ except ImportError:
 
 @logged
 @traced
-class ConnectorNodeJS(Connector, ClientNodeJS):
+class ConnectorNodeJS(ClientNodeJS):
     """External NodeJS connector client."""
 
     _command: NodeJSConnectorClientCommand

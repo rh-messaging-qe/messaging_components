@@ -1,5 +1,5 @@
-from messaging_abstract.component import *
-from messaging_components.clients.external.client_external import ClientExternal
+from iqa.components.clients.external.client_external import ClientExternal
+from iqa.system.node import Node, Executor
 from .nodejs import *
 from .python import *
 from .java import *

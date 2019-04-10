@@ -4,7 +4,7 @@ Specialized options for external Python Proton client commands (cli-proton-pytho
 """
 from optconstruct.types import Prefixed
 
-from messaging_components.clients.external.command.options.client_options import ControlOptionsCommon, \
+from iqa.components.clients.external.command.options.client_options import ControlOptionsCommon, \
     ControlOptionsSenderReceiver, ControlOptionsReceiver, ConnectionOptionsCommon
 
 
