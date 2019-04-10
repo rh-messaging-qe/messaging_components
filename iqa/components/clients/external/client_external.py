@@ -4,7 +4,7 @@ from messaging_components.clients.external.command.client_command import ClientC
 
 class ClientExternal(Client):
     """
-    Represents messaging clients that are executed externally as command line applications.
+    Represents abstract clients that are executed externally as command line applications.
     """
 
     # Default is run forever

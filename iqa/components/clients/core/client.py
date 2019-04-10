@@ -1,17 +1,11 @@
-"""
-    # TODO jstejska: Package description
-"""
-
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Client, Node
 
-import messaging_components.protocols as protocols
+from iqa.messaging.abstract.client import MessagingClient
 
 
 @logged
 @traced
-class ClientCore(Client):
+class CoreMessagingClient(MessagingClient):
     """Internal core Proton mapping client."""
 
     supported_protocols = [protocols.Amqp10()]
@@ -19,12 +13,8 @@ class ClientCore(Client):
     version = '0.1'
 
     def __init__(self, name: str, node: Node, executor: Executor):
-        super(ClientCore, self).__init__(name, node, executor)
+        super(CoreMessagingClient, self).__init__(name, node, executor)
 
-#
-# """
-#     # TODO jstejska: Package description
-# """
 #
 # # -*- coding: utf-8 -*-
 #

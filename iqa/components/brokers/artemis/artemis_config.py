@@ -3,8 +3,8 @@ import posixpath
 
 from amqcfg import amqcfg
 
-from iqa.abstract.components.component import Component
-from iqa.abstract.messaging.user import User
+from iqa.messaging.abstract.component import Component
+from iqa.messaging.abstract.user import User
 from iqa.components.brokers.broker_config import BrokerConfiguration
 from iqa.components.config.config import Utils, IQAConfigurationException
 

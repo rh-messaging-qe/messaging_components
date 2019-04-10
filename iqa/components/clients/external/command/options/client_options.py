@@ -3,7 +3,7 @@ from optconstruct.types import Toggle, Prefixed, KWOption, ListOption
 
 """
 This modules defines all supported command line options for external
-messaging clients, with specialized classes for sender and receivers.
+abstract clients, with specialized classes for sender and receivers.
 Each implementation of ClientOptionsBase must provide a list of
 OptionAbstract (optconstruct) that is supported.
 """

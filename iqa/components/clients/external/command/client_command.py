@@ -5,7 +5,7 @@ All options here are common to all kind of client commands, be it a
 receiver, sender or connector.
 Options are also common to implementation language (java, python, etc).
 In case an implementation has a different set of options, specialize it
-in a separate module inside messaging.client.command.impl.
+in a separate module inside abstract.client.command.impl.
 """
 
 from iqa_common.executor import Command

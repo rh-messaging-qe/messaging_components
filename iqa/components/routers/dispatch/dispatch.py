@@ -1,7 +1,7 @@
 from autologging import logged, traced
 
-from iqa.abstract.components.server.server_component import ServerComponent
-from iqa.abstract.messaging.server.router import Router
+from iqa.components.abstract.server.server_component import ServerComponent
+from iqa.messaging.abstract.server.router import Router
 from .management import QDManage, QDStat
 from .config import Config
 from .log import Log

@@ -6,4 +6,4 @@ from optconstruct.types import KWOption
 
 
 class MsgContentMap(KWOption):
-    """Basic MsgContentMap option parser for messaging clients."""
+    """Basic MsgContentMap option parser for abstract clients."""

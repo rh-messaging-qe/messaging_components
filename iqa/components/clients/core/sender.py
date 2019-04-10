@@ -2,10 +2,8 @@
     # TODO jstejska: Package description
 """
 from autologging import logged, traced
-from iqa_common.executor import Executor
-from messaging_abstract.component.client import Sender, Node
 
-from messaging_components.clients.core.client import ClientCore
+from iqa.messaging.abstract.client.sender import Sender
 
 
 @logged

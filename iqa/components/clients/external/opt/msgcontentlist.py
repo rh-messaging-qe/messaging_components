@@ -6,4 +6,4 @@ from optconstruct.types.listoption import ListOption
 
 
 class MsgContentList(ListOption):
-    """Basic MsgContentList option parser for messaging clients."""
+    """Basic MsgContentList option parser for abstract clients."""
