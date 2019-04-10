@@ -54,7 +54,8 @@ class Config(object):
             LOGGER.info("No configuration file provided, using defaults")
 
         # ansible synchronize must have trailing "/" to sync dir-content
-        self.local_config_dir = posixpath.join(os.path.dirname(component.executor.inventory), component.name, "")
+        # TODO inventory is not part of Executor (this is not generic)
+        # self.local_config_dir = posixpath.join(os.path.dirname(component.executor.inventory), component.name, "")
 
     def _data_getter(self, path, default=None):
         """General function to query data from provided external data dictionary.

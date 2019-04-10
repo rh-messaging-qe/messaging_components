@@ -6,7 +6,6 @@ from .service_docker import *
 from .service_system_init import *
 from .service_systemd import *
 from .service_artemis import *
-from .serviceartemis import *
 
 import logging
 
