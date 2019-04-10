@@ -5,10 +5,12 @@ from messaging_components.clients.external.client_external import ClientExternal
 
 from messaging_components import protocols
 
+from iqa.components.abstract.component import Component
+
 
 @logged
 @traced
-class ClientJava(ClientExternal):
+class ClientJava(ClientExternal, Component):
     """Java Qpid JMS client (base abstract class)."""
 
     supported_protocols = [protocols.Amqp10()]

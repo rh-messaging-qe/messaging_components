@@ -1,8 +1,9 @@
-from messaging_abstract.component import Client, Node, Executor
-from messaging_components.clients.external.command.client_command import ClientCommand
+from iqa.components.abstract.component import Component
+from iqa.components.clients.external.command.client_command import ClientCommand
+from iqa.messaging.abstract.client import MessagingClient
 
 
-class ClientExternal(Client):
+class ClientExternal(MessagingClient, Component):
     """
     Represents abstract clients that are executed externally as command line applications.
     """
@@ -11,8 +12,8 @@ class ClientExternal(Client):
     # As mixing --timeout with --count is causing issues
     TIMEOUT = 90
 
-    def __init__(self, name: str, node: Node, executor: Executor, **kwargs):
-        super(ClientExternal, self).__init__(name, node, executor, **kwargs)
+    def __init__(self, name: str, **kwargs):
+        super(ClientExternal, self).__init__(name, **kwargs)
         self.execution = None  # type: Execution
         self._command = None  # type: ClientCommand
         self._url = None  # type: str
