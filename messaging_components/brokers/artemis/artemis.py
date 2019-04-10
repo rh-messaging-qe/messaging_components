@@ -164,8 +164,8 @@ class Artemis(Broker):
         Creates a new instance of the Jolokia Client.
         :return:
         """
-        client = ArtemisJolokiaClient(self.config.instance_name, self.node.get_ip(), self.config.ports['web'],
-                                      self.config.get_username('admin'), self.config.get_user_password('admin'))
+        client = ArtemisJolokiaClient(self.broker_name, self.node.get_ip(), self.web_port,
+                                      self.user, self.password)
         return client
 
     def _get_routing_type(self, routing_type: RoutingType) -> str:
