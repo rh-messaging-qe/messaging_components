@@ -5,7 +5,8 @@ Implementation of cli-proton-python external client command.
 from messaging_components.clients.external.command.client_command import ConnectorClientCommand, ReceiverClientCommand, \
     LinkOptionsReceiver, ReactorOptionsSenderReceiver, SenderClientCommand, LinkOptionsSenderReceiver
 from messaging_components.clients.external.python.command.python_options import PythonControlOptionsCommon, \
-    PythonControlOptionsReceiver, PythonControlOptionsSenderReceiver, PythonConnectionOptionsCommon
+    PythonControlOptionsReceiver, PythonControlOptionsSenderReceiver, PythonConnectionOptionsCommon, \
+    PythonControlOptionsSender
 
 
 class PythonConnectorClientCommand(ConnectorClientCommand):
@@ -51,7 +52,7 @@ class PythonSenderClientCommand(SenderClientCommand):
     def __init__(self, stdout: bool=False, stderr: bool=False, daemon: bool=False,
                  timeout: int=0, encoding: str="utf-8"):
         super(PythonSenderClientCommand, self).__init__(stdout, stderr, daemon, timeout, encoding)
-        self.control = PythonControlOptionsSenderReceiver()
+        self.control = PythonControlOptionsSender()
         self.link = LinkOptionsSenderReceiver()
         self.reactor = ReactorOptionsSenderReceiver()
         self.connection = PythonConnectionOptionsCommon()
