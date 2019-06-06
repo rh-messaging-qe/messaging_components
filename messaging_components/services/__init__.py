@@ -5,6 +5,8 @@ from messaging_abstract.component.server.service import *
 from .service_docker import *
 from .service_system_init import *
 from .service_systemd import *
+from .service_artemis import *
+
 import logging
 
 
@@ -41,6 +43,10 @@ class ServiceFactory(object):
                 container_name = executor.container_name
             elif isinstance(executor, ExecutorAnsible) and executor.ansible_connection == 'docker':
                 container_name = executor.ansible_host
+            elif isinstance(executor, ExecutorAnsible):
+                ServiceFactory._logger.debug("Creating ServiceArtemis - name: %s - executor: %s"
+                                             % (service_name, executor.__class__.__name__))
+                return ServiceArtemis(name=service_name, executor=executor, **kwargs)
 
             if container_name:
                 ServiceFactory._logger.debug("Creating ServiceDocker - name: %s - executor: %s"

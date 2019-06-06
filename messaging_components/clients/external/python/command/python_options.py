@@ -44,8 +44,26 @@ class PythonControlOptionsReceiver(ControlOptionsReceiver, PythonControlOptionsS
                  duration_mode: str=None, capacity: int=None, dynamic: bool=False):
         ControlOptionsReceiver.__init__(self, dynamic=dynamic)
         PythonControlOptionsSenderReceiver.__init__(self, broker_url=broker_url, count=count,
-                                                  timeout=timeout, sync_mode=sync_mode, duration=duration,
-                                                  duration_mode=duration_mode, capacity=capacity)
+                                                    timeout=timeout, sync_mode=sync_mode, duration=duration,
+                                                    duration_mode=duration_mode, capacity=capacity)
+
+
+class PythonControlOptionsSender(PythonControlOptionsSenderReceiver):
+    """
+    Specialized implementation of control options for Sender Python client command.
+    """
+    def __init__(self, broker_url: str='127.0.0.1:5672/examples', count: int=1,
+                 timeout: int=None, sync_mode: str=None, duration: int=None,
+                 duration_mode: str=None, capacity: int=None, on_release: str='retry'):
+        PythonControlOptionsSenderReceiver.__init__(self, broker_url=broker_url, count=count,
+                                                    timeout=timeout, sync_mode=sync_mode, duration=duration,
+                                                    duration_mode=duration_mode, capacity=capacity)
+        self.on_release = on_release
+
+    def valid_options(self) -> list:
+        return PythonControlOptionsCommon.valid_options(self) + [
+            Prefixed('on-release', '--on-release')
+        ]
 
 
 class PythonConnectionOptionsCommon(ConnectionOptionsCommon):

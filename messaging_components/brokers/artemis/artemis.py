@@ -10,6 +10,7 @@ from messaging_abstract.node.node import Node
 
 import messaging_components.protocols as protocols
 from messaging_components.brokers.artemis.management import ArtemisJolokiaClient
+from messaging_components.config.broker_config import ArtemisConfig
 
 
 class Artemis(Broker):
@@ -26,6 +27,9 @@ class Artemis(Broker):
         self._queues: List[Queue] = list()
         self._addresses: List[Address] = list()
         self._addresses_dict = {}
+
+        self.config = ArtemisConfig(self, **kwargs)
+        self.users = self.config.users
 
     def queues(self, refresh: bool=True) -> List[Queue]:
         """
@@ -57,7 +61,7 @@ class Artemis(Broker):
         :param address:
         :return:
         """
-        client = self._get_client()
+        client = self._get_management_client()
         routing_type = self._get_routing_type(address.routing_type)
         return client.create_address(address.name, routing_type)
 
@@ -69,7 +73,7 @@ class Artemis(Broker):
         :param durable:
         :return:
         """
-        client = self._get_client()
+        client = self._get_management_client()
         if queue.routing_type == RoutingType.BOTH:
             raise ValueError('Queues can only use ANYCAST or MULTICAST routing type')
         return client.create_queue(address.name, queue.name, durable, queue.routing_type.name)
@@ -81,7 +85,7 @@ class Artemis(Broker):
         :param force:
         :return:
         """
-        client = self._get_client()
+        client = self._get_management_client()
         return client.delete_address(name, force)
 
     def delete_queue(self, name: str, remove_consumers: bool = False):
@@ -91,7 +95,7 @@ class Artemis(Broker):
         :param remove_consumers:
         :return:
         """
-        client = self._get_client()
+        client = self._get_management_client()
         return client.delete_queue(name, remove_consumers)
 
     def _refresh_addresses_and_queues(self):
@@ -105,7 +109,7 @@ class Artemis(Broker):
         addresses = list()
 
         # Get a new client instance
-        client = self._get_client()
+        client = self._get_management_client()
         queues_result = client.list_queues()
         addresses_result = client.list_addresses()
 
@@ -155,7 +159,7 @@ class Artemis(Broker):
         self._addresses = addresses
         self._queues = queues
 
-    def _get_client(self):
+    def _get_management_client(self):
         """
         Creates a new instance of the Jolokia Client.
         :return:
